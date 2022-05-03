@@ -1,0 +1,17 @@
+{
+  "name": "remote-actions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "download" : "node download-api-zip.js reference",
+    "test": "node download-api-zip.js reference"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@apidevtools/swagger-parser": "^10.0.3",
+    "adm-zip": "^0.5.9",
+    "js-yaml": "^4.1.0"
+  }
+}
