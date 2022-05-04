@@ -7,7 +7,7 @@ const AdmZip = require("adm-zip");
 const args = process.argv.slice(2);
 console.log(`External Dir ---->>> ${args}`);
 //const folder = '../' + (args?.[0] || 'references/1.0.0');
-const folder = args?.[0];
+const folder = args?.[0]+"/reference";
 let zip = new AdmZip(); 
 const failValidation = (message) => {
   console.log('------------------------- YAML VALIDATOR / GENERARTOR FAILED --------------------------')
@@ -15,7 +15,6 @@ const failValidation = (message) => {
 };
 //const  downloadZiipFile = `tenant`;
 let downloadFile; 
-
 const generateZipCollection = async (dir) => { 
   fs.readdir(dir, { withFileTypes: true }, (err, files) => {
     files.forEach(async file => { 
@@ -41,7 +40,7 @@ const generateZipCollection = async (dir) => {
                zip.addFile(`${folder}/${file.name}`, Buffer.from(content, "utf8"), "entry comment goes here");  
             }  
              downloadFile = 'tennat_spec';   
-             await zip.writeZip(`../validator/${downloadFile}.zip`); 
+             await zip.writeZip(`${args}/assets/${downloadFile}.zip`); 
              console.log(`File downloaded ---${file.name}`); 
           } 
         } catch (e) {
