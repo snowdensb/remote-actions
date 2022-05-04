@@ -5,7 +5,9 @@ const yaml = require('js-yaml');
 const SwaggerParser = require('@apidevtools/swagger-parser');
 const AdmZip = require("adm-zip");
 const args = process.argv.slice(2);
-const folder = '../' + (args?.[0] || 'references/1.0.0');
+console.log(`External Dir ---->>> ${args}`);
+//const folder = '../' + (args?.[0] || 'references/1.0.0');
+const folder = args?.[0];
 let zip = new AdmZip(); 
 const failValidation = (message) => {
   console.log('------------------------- YAML VALIDATOR / GENERARTOR FAILED --------------------------')
@@ -30,7 +32,7 @@ const generateZipCollection = async (dir) => {
           const parsedData = await SwaggerParser.validate(apiJson);
           if (parsedData){ 
               const folder = dir.replace('../reference/','');
-             console.log(`Directory accessed ---${ dir.replace('../reference/','')}`); 
+             console.log(`Sub Dir accessed ---${ dir.replace('../reference/','')}`); 
       
             if (folder === '../reference'){
                zip.addFile(file.name, Buffer.from(content, "utf8"), "entry comment goes here"); 

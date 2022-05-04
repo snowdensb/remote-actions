@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "download" : "node download-api-zip.js reference",
+    "download" : "node download-api-zip.js $path",
+    "validate" :"node validator-yaml.js $path",
     "test": "node download-api-zip.js reference"
   },
   "author": "",
