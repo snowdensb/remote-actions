@@ -41,7 +41,7 @@ const generateZipCollection = async (dir) => {
                zip.addFile(`${folder}/${file.name}`, Buffer.from(content, "utf8"), "entry comment goes here");  
             }  
              downloadFile = 'tennat_spec';   
-             await zip.writeZip(`${downloadFile}.zip`); 
+             await zip.writeZip(`../tenant/validator/${downloadFile}.zip`); 
              console.log(`File downloaded ---${file.name}`); 
           } 
         } catch (e) {
