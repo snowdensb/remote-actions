@@ -5,15 +5,13 @@ const yaml = require('js-yaml');
 const SwaggerParser = require('@apidevtools/swagger-parser');
 const AdmZip = require("adm-zip");
 const args = process.argv.slice(2);
-console.log(`External Dir ---->>> ${args}`);
-//const folder = '../' + (args?.[0] || 'references/1.0.0');
+console.log(`External Dir ---->>> ${args}`); 
 const folder = args?.[0]+"/reference";
 let zip = new AdmZip(); 
 const failValidation = (message) => {
-  console.log('------------------------- YAML VALIDATOR / GENERARTOR FAILED --------------------------')
+  console.log('------------------------- ZIP GENERATOR FAILED --------------------------')
   console.log(message)
 };
-//const  downloadZiipFile = `tenant`;
 let downloadFile; 
 const generateZipCollection = async (dir) => { 
   fs.readdir(dir, { withFileTypes: true }, (err, files) => {

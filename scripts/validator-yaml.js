@@ -2,15 +2,14 @@
 
 const fs = require('fs');
 const yaml = require('js-yaml');
-const SwaggerParser = require('@apidevtools/swagger-parser');
-
+const SwaggerParser = require('@apidevtools/swagger-parser'); 
 const args = process.argv.slice(2);
+console.log(`External Dir ---->>> ${args}`);
 //const folder = '../' + (args?.[0] || 'references/1.0.0');
-const folder = args?.[0];
+const folder = args?.[0]+"/reference";
 const failValidation = (message) => {
   console.log('------------------------- VALIDATOR FAILED --------------------------')
   console.log(message)
-  //process.exit(1);
 };
 
 const validateDir = async (dir) => {

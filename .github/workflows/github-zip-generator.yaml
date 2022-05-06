@@ -67,7 +67,7 @@ jobs:
           ls -la
           rm -rf ${{github.workspace }}/tools
           echo "Temp tools directory deleted ......"
-          if [[ $result == *'YAML VALIDATOR / GENERARTOR FAILED'* ]] ;then
+          if [[ $result == *'ZIP GENERATOR FAILED'* ]] ;then
           echo "Validator failed and exiting the Job..."
           exit 1
           elif [[ $result == *'PASSED'* ]] ;then
