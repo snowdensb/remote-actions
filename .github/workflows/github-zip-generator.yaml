@@ -5,11 +5,7 @@ on:
   push:
     branches: [ develop,stage,main ]
     paths:
-      - 'reference/**'
-  # pull_request:
-  #   branches: [ develop,stage,main ]
-  #   paths:
-  #     - 'reference/**'    
+      - 'reference/**' 
 
 jobs:
   Explore-GitHub-Actions:

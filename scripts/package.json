@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "download" : "node download-api-zip.js $path",
-    "validate" :"node validator-yaml.js $path",
+    "download": "node download-api-zip.js $path",
+    "validate": "node validator-yaml.js $path",
+    "markdown": "node md-validator.js $path",
     "test": "node download-api-zip.js reference"
   },
   "author": "",
@@ -13,6 +14,10 @@
   "dependencies": {
     "@apidevtools/swagger-parser": "^10.0.3",
     "adm-zip": "^0.5.9",
-    "js-yaml": "^4.1.0"
+    "highlight.js": "^11.5.1",
+    "js-yaml": "^4.1.0",
+    "markdown-it": "^13.0.1",
+    "markdownlint": "^0.25.1",
+    "showdown": "^2.1.0"
   }
 }
