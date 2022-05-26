@@ -56,7 +56,7 @@ const markdownlinter = async (dir) => {
             const result = markdownlint.sync(options);
             if (result.toString().length > 0){ 
               failValidation(`PLEASE CHECK FOLLOWING LINTER ISSUES WITHIN THE FILE : ${fileName}`);
-              console.log(result);
+              console.log(result.toString());
             }else{
               console.log(`${fileName} - PASSED`);
             }
