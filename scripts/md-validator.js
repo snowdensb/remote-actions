@@ -40,7 +40,7 @@ const markdownlinter = async (dir) => {
     fs.readdir(dir, { withFileTypes: true }, (err, files) => {
       files.forEach(async file => { 
         if (file.isDirectory()) {
-          generateZipCollection(`${dir}/${file.name}`);
+          markdownlinter(`${dir}/${file.name}`);
         } else if (/\.md$/.test(file.name)){ 
           try {
             let fileName = `${dir}/${file.name}`;   
@@ -74,7 +74,7 @@ const markdownValidator= async (dir) => {
   fs.readdir(dir, { withFileTypes: true }, (err, files) => {
     files.forEach(async file => { 
       if (file.isDirectory()) {
-        generateZipCollection(`${dir}/${file.name}`);
+        markdownValidator(`${dir}/${file.name}`);
       } else if (/\.md$/.test(file.name)){ 
         try {
           let fileName = `${dir}/${file.name}`; 
