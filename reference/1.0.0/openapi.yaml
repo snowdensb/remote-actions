@@ -1,371 +1,610 @@
-################################################################################
-# Copyrights © 2021-2022 Fiserv, Inc. or its affiliates. 
-# Fiserv is a trademark of Fiserv, Inc., 
-# registered or used in the United States and foreign countries, 
-# and may or may not be registered in your country.  
-# All trademarks, service marks, 
-# and trade names referenced in this 
-# material are the property of their 
-# respective owners. This work, including its contents 
-# and programming, is confidential and its use 
-# is strictly limited. This work is furnished only 
-# for use by duly authorized licensees of Fiserv, Inc. 
-# or its affiliates, and their designated agents 
-# or employees responsible for installation or 
-# operation of the products. Any other use, 
-# duplication, or dissemination without the 
-# prior written consent of Fiserv, Inc. 
-# or its affiliates is strictly prohibited. 
-# Except as specified by the agreement under 
-# which the materials are furnished, Fiserv, Inc. 
-# and its affiliates do not accept any liabilities 
-# with respect to the information contained herein 
-# and are not responsible for any direct, indirect, 
-# special, consequential or exemplary damages 
-# resulting from the use of this information. 
-# No warranties, either express or implied, 
-# are granted or extended by this work or 
-# the delivery of this work
-################################################################################
-
-openapi: 3.0.2
+openapi: 3.0.1
 info:
-  title: Dev Portal Tenant APIs.
-  description: To onboard properly into the Fiserv Developer Studio as a tenant each
-    product must support these APIs so that we can retrieve product specific API specifications
-    and documentation.
+  title: PX API
+  description: 'This YAML file supports Payments functionalities within the PX Api Application'
   version: 1.0.0
 servers:
-  - url: https://tenants.fiserv.com/
+# Added by API Auto Mocking Plugin
+- description: SwaggerHub API Auto Mocking
+  url: http://swaggerhub.frms.pvt/virts/PX_ORG/PaymentApi/1.0.0
+- url: http://localhost:8081/px-api/v1
+tags:
+- name: Payments
+  description:  Payments
 paths:
-  /v1/products:
-    get:
-      tags:
-        - Tenant
-      x-group-name: Tenant
-      x-proxy-name: products
-      summary: Returns tenant provider API.
-      operationId: TenantProviderID
-      responses:
-        200:
-          description: Tenant provider response. <a href="https://fiserv.com" rel="noopener noreferrer" target="_blank">external link</a> <a href="../docs?path=docs/getting-started/setup-tenant/setup-tenant.md">Setup Tenant</a>
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TenantProviderResponse'
-            text/yaml:
-              schema:
-                $ref: '#/components/schemas/TenantProviderResponse'
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/TenantProviderResponse'
-  /v1/apis:
+  /payment/outgoing-payments:
     post:
       tags:
-        - Specs
-      x-group-name: Specs
-      x-proxy-name: apis
-      summary: Returns OpenAPI Spec.
-      operationId: APISpecProviderId
+      - Payment Search
+      x-group-name: Payment Search
+      x-proxy-name: outgoing-payments
+      summary: Payment Search
+      operationId: searchPayments
       requestBody:
-        description: Filter Request
+        description: search Outgoing payment
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SpecsFilterRequest'
-        required: false
+              $ref: '#/components/schemas/paymentSearchRequest'
       responses:
         200:
-          description: ""
-          content: {}
-      x-codegen-request-body-name: Body
-  /v1/docs:
-    get:
-      tags:
-        - Documents
-      x-group-name: Documents
-      x-proxy-name: docs
-      summary: Returns Docs in markdown format.
-      operationId: DocsAPIId
-      parameters:
-        - in: query
-          name: path
-          schema:
-            type: string
-          required: true
-          description: Markdown document path
-      responses:
-        200:
-          description: ""
-          content: {}
-      x-codegen-request-body-name: Body
-  /v1/layouts:
-    get:
-      tags:
-        - Layout
-      x-group-name: Layout
-      x-proxy-name: layouts
-      summary: Returns the product page layout.
-      operationId: LayoutAPIId
-      responses:
-        200:
-          description: This text will appear as description of your response body.
+          description: OK.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PageLayoutResponse'
-            text/yaml:
-              schema:
-                $ref: '#/components/schemas/PageLayoutResponse'
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/PageLayoutResponse'
-  /live:
-    get:
+                $ref: '#/components/schemas/PaymentSearchResponses'
+        500:
+          description: Internal Server error on rtp
+          content: {}
+      x-codegen-request-body-name: body
+  /payment/payments:    
+    post:
       tags:
-        - HealthCheck
-      x-group-name: HealthCheck
-      x-proxy-name: live
-      summary: Health check probes.
-      operationId: healthCheckId
-      x-links: 
-        link1: 
-          description: Developer Studio
-          flag: external
-          url:  'https://dev-developerstudio.fiserv.com/'
-        link2: 
-          description: Setup tenant
-          flag: internal
-          url:  '../docs?path=docs/getting-started/setup-tenant/setup-tenant.md'
-        link3: 
-          description: Fiserv Portal
-          flag: external
-          url:  'https://fiserv.com'
+      - Create Payment
+      x-group-name: Create Payment
+      x-proxy-name: payments
+      summary: Create Payment 
+      operationId: createPayment
+      requestBody:
+        description: Create Payment
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequests'
       responses:
-        200:
-          description: Health check.
+        201:
+          description: Payment added successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LiveProbeResponse'
-  
+                $ref: '#/components/schemas/PaymentResponses'
+        400:
+          description: Payment already exists.
+          content: {}
+        500:
+          description: Internal Server error on rtp
+          content: {}
+      x-codegen-request-body-name: body
+security:
+  - bearerAuth: []
 components:
   schemas:
-    LiveProbeResponse:
+    paymentSearchRequest:
       type: object
       properties:
-        message:
+        debtorAccount:
           type: string
-          description: Message
-    PageLayoutResponse:
-      type: array
-      items:
-        type: object
-        properties:
-          hero:
-            type: array
-            items:
-              type: object
-              properties:
-                descrption:
-                  type: string
-                  description: Descrption
-                image:
-                  type: string
-                  description: Image
-            description: Hero
-          journey Cards:
-            type: array
-            items:
-              type: object
-              properties:
-                journeyCard:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      contextualNavigationCards:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            contextualNavigationCard:
-                              type: array
-                              items:
-                                type: object
-                                properties:
-                                  description:
-                                    type: string
-                                    description: Description
-                                  link:
-                                    type: array
-                                    items:
-                                      type: object
-                                      properties:
-                                        type:
-                                          type: string
-                                          description: Type
-                                        uri:
-                                          type: string
-                                          description: URI
-                                    description: Link
-                                  title:
-                                    type: string
-                                    description: Title
-                              description: ContextualNavigationCard
-                        description: ContextualNavigationCards
-                      description:
-                        type: string
-                        description: Description
-                      link:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            type:
-                              type: string
-                              description: Type
-                            uri:
-                              type: string
-                              description: URI
-                        description: Link
-                      title:
-                        type: string
-                        description: Title
-                  description: JourneyCard
-            description: JourneyCards
-    SpecsFilterRequest:
+          pattern: '^[a-zA-Z0-9-,.]*$'
+          maxLength: 34
+          example: '3456-9080-980'
+          description: The customer�s account to be debited
+        stage:
+          type: string
+          example: 'CLEARING'
+          description: Identifies where the payment is in the process flow
+        status:
+          type: string
+          example: 'AC03'
+          description: The status of the payment record
+        paymentSeqId:
+          type: string
+          pattern: '^[0-9]*$'
+          maxLength: 19
+          example: 12365
+          description: A unique number assigned to each outbound RTP payment
+        externalRefId:
+          type: string
+          maxLength: 35
+          description: Identifies the external source application�s external payment ID; only valid for external sources
+          example: RTP-1693
+        transactionId:
+          type: string
+          maxLength: 35
+          example: 12365
+          description: In RTP, the transaction ID is used to reference the first message in a transaction event           
+        pageIndex:
+          type: integer
+          format: int32
+          example: 1
+          description: Identifies the page the user is currently viewing, for example page 2 of 3
+        pageSize:
+          type: integer
+          format: int32
+          example: 20
+          description: The total number of rows shown on the page; defaults to 20 rows in the grid           
+        orderBy:  
+          type: string
+          example: 'Status'
+          description: How the page is sorted; the default varies by page
+        order:
+          type: string
+          example: 'desc'
+          description: Ascending or descending order           
+      title: paymentSearchRequest 
+    DecryptedActNumber:
       type: object
       properties:
-        categories:
+        decryptAcct:
+          type: string
+      title: DecryptedActNumber  
+    PaymentRequests:
+      type: object
+      properties:
+        messageId:
+          type: string
+          maxLength: 35
+          description: Identifies the clearing system member
+          example: 589648565
+        PaymentRequest:
           type: array
           items:
-            type: object
-            properties:
-              name:
-                type: string
-                description: Name
-              subcategories:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    name:
-                      type: string
-                      description: Name
-                description: Subcategories
-          description: Categories
-    TenantProviderResponse:
+            $ref: '#/components/schemas/PaymentRequest'
+      title: PaymentRequests
+    PaymentRequest:
+      type: object
+      required:
+       - paymentAmount
+       - currency
+       - debtorName
+       - debtorPostalAddress
+       - debtorAccount
+       - customerType
+       - creditorBankABANumber
+       - creditorBankName
+       - creditorAccount
+       - creditorName
+       - creditorPostalAddress
+       - additionalCreditorInformation
+       - settlementDate
+       - endToEndId
+       - source
+       - accountType
+      properties:
+        memberId:
+          type: string
+          maxLength: 9
+          description: Identifies the clearing system member
+          example: 5896585
+        memoNotes:
+          type: string
+          maxLength: 150
+          description: The memo notes field is informational only; it is stored as audit logs
+          example: Contacted customer for clarification
+        settlementDate:
+          type: string
+          format: date 
+          description: Identifies the date (should be current date)
+          example: 04/20/2022
+        paymentAmount:
+          type: number
+          format: double
+          description: Identifies the settlement amount
+          example: 1000000.00
+        currency:
+          type: string
+          description: Currency
+          example: USD
+        paymentInfoId:
+          type: integer
+          format: int64
+          maxLength: 70
+          description: Identifies the external source application�s external payment ID; only valid for external sources
+          example: RTP-3910
+        debtorName:
+          type: string
+          maxLength: 140
+          description: The debtor�s name
+          example: John Smith
+        debtorPostalAddress:
+          $ref: '#/components/schemas/PostalAddress'
+          description: Postal Address
+          example: 5896585
+        debtorAccount:
+          type: string
+          maxLength: 34
+          description: The debtor�s account number
+          example: 1357924680
+        customerType:
+          type: string
+          maxLength: 35
+          description: Identifies the type of customer (Business or Consumer)
+          example: Business
+        endToEndId:
+          type: string
+          maxLength: 35
+          description: Unique identification, as assigned by the initiating party, to unambiguously identify the transaction; this identification is passed on, unchanged, throughout the entire end-to-end chain
+          example: 1239805
+        creditorBankABANumber:
+          type: integer
+          format: int64
+          maxLength: 9
+          description: The creditor�s bank ABA number
+          example: 021000021
+        creditorBankName:
+          type: string
+          maxLength: 70
+          description: The creditor bank name
+          example: Chase
+        creditorName:
+          type: string
+          maxLength: 140
+          description: Creditor name
+          example: Jane Smith
+        creditorPostalAddress:
+          $ref: '#/components/schemas/PostalAddress'
+        creditorAccount:
+          type: string
+          maxLength: 34
+          description: Creditor account
+          example: 8642975310
+        additionalCreditorInformation:
+          type: string
+          maxLength: 140
+          description: Used to provide additional remittance related information, such as commercial invoices 
+          example: Inv 1285901 
+        source:
+          type: string
+          maxLength: 20
+          example: CC
+          description: The external source application�s identification
+        accountType:
+          type: string
+          maxLength: 70
+          description: 'The debtor account type: DDA or SAV'
+          example: DDA
+    PaymentDetailsResponse:
       type: object
       properties:
-        brand:
+        messageId:
           type: string
-          description: Brand
-        brandDescription:
+          maxLength: 35
+          description: Only valid for external sources(Message ID/EXTERNAL_MSG_ID) 
+        memberId:
           type: string
-          description: BrandDescription
-        brandLogoURL:
+          maxLength: 9
+          description: Debtor Agent MMB ID(From UI � default from the tenant) Validate against the member and tenant table. DBTR_AGT_MMB_ID
+        settlementDate:
           type: string
-          description: BrandLogoURL
-        categories:
+          description: only for Service/Batch
+        paymentAmount:
+          type: number
+          format: double
+          description: Amount of money to be moved between the debtor (payer) and creditor (payee), before deduction of charges, expressed in the currency as ordered by the initiating party. The amount must be 0.01 or more, and 9999999999.99 or less.(InstrumentAmountCurrency/INTR_BK_STTLM_AMT)
+        currency:
+          type: string
+          description: InstrumentAmountCurrency/INTR_BK_STTLM_AMT_CCY      
+        paymentInfoId:
+          type: integer
+          format: int64
+          maxLength: 70
+          description: Generated automatically maintaining the uniqueness throughout the end-to-end chain. Where the transfers are sent for the second (or more) times, the value must be different.(Payment Info ID/EXTERNAL_REF_ID) Only valid for external sources
+        debtorName:
+          type: string
+          maxLength: 140
+          description: Name of originator - Debtor/DBTR_NM
+        debtorPostalAddress:
+          $ref: '#/components/schemas/PostalAddress'
+          description: DBTR_STRT_NM-DBTR_TWN_NM-DBTR_CTRY_SUB_DVSN-DBTR_PST_CD-DBTR_CTRY
+        debtorAccount:
+          type: string
+          maxLength: 34
+          description: Debtor Account/DBTR.ACCT_OTHR_ID
+        customerType:
+          type: string
+          maxLength: 10
+          description: CTGY_PURP_PRTY
+        endToEndId:
+          type: string
+          maxLength: 35
+          description: End to End Identification/END_TO_END_ID
+        creditorBankABANumber:
+          type: string
+          maxLength: 9
+          description: Creditor Bank ABA/CDTR_AGT_MMB_ID
+        creditorBankName:
+          type: string
+          maxLength: 70
+          description: Creditors bank name/CDTR_AGT_NM
+        creditorName:
+          type: string
+          maxLength: 140
+          description: Creditor name-CDTR_NM
+        creditorPostalAddress:
+          $ref: '#/components/schemas/PostalAddress'
+        creditorAccount:
+          type: string
+          maxLength: 34
+          description: CDTR_ACCT_OTHR_ID/Creditor Account
+        additionalCreditorInformation:
+          type: string
+          maxLength: 140
+          description: USTRD
+        source:
+          type: string
+          maxLength: 20
+        accountType:
+          type: string
+          description: Account Type/ACCOUNT_TYPE
+        postingStatus:
+          type: string
+          maxLength: 35
+        paymentSeqId:
+          type: string
+          maxLength: 35
+        externalRefId:
+          type: string
+          maxLength: 35
+        stage:
+          type: string
+          maxLength: 10
+          description: Creditor name-STAGE
+        status:
+          type: string
+          maxLength: 70
+          description: Creditor name-CDTR_NM
+        transactionId:
+          type: string
+          maxLength: 70
+        direction:
+          type: string
+        date:
+          type: string
+    PaymentSearchResponses:
+      type: object
+      properties:
+        totalCount:
+         type: integer
+         format: int64
+         example: 120
+         description: Total number of records
+        PaymentResponse:
           type: array
           items:
-            type: object
-            properties:
-              name:
-                type: string
-                description: Name
-              subcategories:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    name:
-                      type: string
-                      description: Name
-                    value:
-                      type: string
-                      description: Value
-                description: Subcategories
-              value:
-                type: string
-                description: Value
-          description: Categories
-        name:
+            $ref: '#/components/schemas/PaymentSearchResponse'
+    PaymentSearchResponse:
+      type: object
+      properties:
+        paymentSeqId:
+          type: integer
+          format: int64
+          description: A unique number assigned to each outbound RTP payment
+          example: 13589674
+        status:
           type: string
-          description: Name
-        product:
+          description: Identifies the �stage� of the payment and the payment status
+          example: CLEARING - SENT
+        debtorName:
+          type: string
+          description: The debtor�s name
+          example: John Smith
+        debtorAccount:
+          type: string
+          description: The customer�s account to be debited
+          example: 1357924680
+        amount:
+          type: string
+          description: Amount
+          example: 589600
+        source:
+          type: string
+          description: Identifies the external source application
+          example: CC
+        date:
+          type: string
+          description: Identifies the date (should be current date)
+          example: 04/20/2022
+        transactionId:
+          type: string
+          description: In RTP, the transaction ID is used to reference the first message in a transaction event
+          example: 2536
+      title: paymentSearchResponse    
+    PostalAddress:
+      type: object
+      required:
+       - streetName
+       - zipCode
+       - city
+       - state
+       - country
+      properties:
+        streetName:
+          type: string
+          maxLength: 70
+          example: 6769 PROSPECT WAY
+        zipCode:
+          type: string
+          pattern: (^\d{5}$)|(^\d{9}$)|(^\d{5}-\d{4}$)
+          example: 75063
+        city:
+          type: string
+          maxLength: 35
+          example: Irving
+        state:
+          type: string
+          minLength: 2
+          maxLength: 35  
+          example: TX
+        country:
+          type: string
+          example: USA
+    PaymentResponses:
+      type: object
+      properties:
+        messageId:
+          type: string
+          maxLength: 35
+          description: Identifies the reference number created by the external application
+          example: 5896896
+        PaymentResponse:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentResponse'
+    PaymentResponse:
+      type: object
+      properties:
+        statusCode:
+          type: string
+          maxLength: 35
+          description: Indicates success (1) or failure (0)
+          example: 1
+        errorDescription:
+          type: string
+          maxLength: 135
+          description: Error description
+          example: Invalid memberId
+        externalPaymentId:
+          type: string
+          maxLength: 35
+          description: Identifies the external source application�s external payment ID; only valid for external sources
+          example: RTP-3910
+        paymentSeqId:
+          type: string
+          maxLength: 35
+          description: A unique number assigned to each outbound RTP payment
+          example:
+    PaymentEnquiryDto:
+      type: object
+      properties:
+        extlReqId:
+          type: integer
+          format: int64
+        ExtlReqDtlDto:  
+          type: array
+          items:
+           $ref: '#/components/schemas/ExtlReqDtlDto'
+      title: PaymentEnquiryDto
+    PaymentReqAmtDto:  
+      type: object
+      properties:
+        amount:  
+          type: number
+          format: double
+    ExtlReqDtlDto:  
+      type: object
+      properties:
+        status:
+          type: string
+        extlReqDtlId:  
+          type: integer
+          format: int64      
+      title: ExternalRequestDtlDto
+    CoreValidateRequest:
+      type: object
+      required:
+       - debtorAccountNumber
+       - debtorAccountType
+      properties:
+        debtorAccountNumber:
+          type: string
+          pattern: '^[a-zA-Z0-9-,.]*$'
+          maxLength: 34
+        debtorAccountType:
+          type: string
+          pattern: '^[a-zA-Z]*$'
+          maxLength: 10
+    CoreValidateResponse:
+      type: object
+      properties:
+        seqId:
+          type: integer
+          format: int64
+          description: Unqiue Sequence Id
+          example: 1267
+        statusCode:
+          type: string
+          description: Status Code returned by the Core
+          example: ACWP
+        statusDescription:
+          type: string
+          description: Status description
+          example: 'Rejected'
+        reasonCode:
+          type: string
+          description: Reason Code
+          example: ''
+        accountHolderDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountDetails'
+        accountBalanceMap:
           type: object
-          properties:
-            apiSpecification:
-              type: string
-              description: APISpecification 
-            description:
-              type: string
-              description: Description
-            documentation:
-              type: string
-              description: Documentation
-            featured:
-              type: boolean
-              description: Featured
-            layout:
-              type: string
-              description: Layout
-            logoURL:
-              type: string
-              description: LogoURL
-          description: Product
-        solution:
+          additionalProperties:
+            type: number
+        errorList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorInfo'
+      title: CoreValidateResponse      
+    AccountDetails:
+      type: object
+      properties:
+        accountType:
           type: string
-          description: Solution
-        title:
+        accountNumber:
           type: string
-          description: Title
-  responses:
-    apiSpecResponseWrapper:
-      description: OpenAPI Spec for the APIs. 
-      content: {}
-    docsResponseWrapper:
-      description: Markdown files.
-      content: {}
-    liveResponse:
-      description: Health check.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/LiveProbeResponse'
-        text/yaml:
-          schema:
-            $ref: '#/components/schemas/LiveProbeResponse'
-        text/plain:
-          schema:
-            $ref: '#/components/schemas/LiveProbeResponse'
-    productPage:
-      description: This text will appear as description of your response body. 
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/PageLayoutResponse'
-        text/yaml:
-          schema:
-            $ref: '#/components/schemas/PageLayoutResponse'
-        text/plain:
-          schema:
-            $ref: '#/components/schemas/PageLayoutResponse'
-    tenant:
-      description: This text will appear as description of your response body. 
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/TenantProviderResponse'
-        text/yaml:
-          schema:
-            $ref: '#/components/schemas/TenantProviderResponse'
-        text/plain:
-          schema:
-            $ref: '#/components/schemas/TenantProviderResponse'
+        accountHolderNames:
+          type: array
+          items:
+            type: string
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        city:
+          type: string
+        state: 
+          type: string
+        zipCode: 
+           type: string
+        country:
+           type: string
+    ErrorInfo:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          type: string 
+    CreditorBankNumValidateResponse:
+      type: object
+      properties:
+        participantName:
+          type: string
+        signed_off:
+          type: boolean
+        suspended:
+          type: boolean
+        disconnected:
+          type: boolean  
+  parameters:
+    paymentSeqId:
+      name: paymentSeqId
+      required: true
+      schema:
+        type: integer
+        description: A unique number assigned to each outbound RTP payment
+        example: 135792468      
+        format: int64
+      in: query
+    externalReqId:
+      name: externalReqId
+      in: path
+      description: ExternalRequestId
+      required: true
+      schema:
+        type: integer
+        format: int64  
+    creditorBankNum:
+      name: creditorBankNum
+      in: query
+      description: Creditor Bank Number
+      required: true
+      schema:
+        type: integer
+        format: int64
+      example: 135792468      
   securitySchemes:
-    basic:
+    bearerAuth:            
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT
