@@ -16,7 +16,7 @@ paths:
     post:
       tags:
       - Payment Search
-      x-group-name: Payment Search
+      x-group-name: Payment Searchs
       x-proxy-name: outgoing-payments
       summary: Payment Search
       operationId: searchPayments
