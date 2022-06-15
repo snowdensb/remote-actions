@@ -6,13 +6,16 @@ const markdownlint = require("markdownlint");
 const args = process.argv.slice(2); 
 const folder = args?.[0]+"/docs";
 const { enrichHTMLFromMarkup, showdownHighlight, mdExtension } = require('./utils/md-utils'); 
-//const html_validator = require('html-validator')
+const {errorMessage  , printMessage} = require('./utils/tools')
+// const failValidation = (message) => {
+//   console.dir('------------------------- MD VALIDATOR FAILED --------------------------', { 'colors': true, "depth": null });
+//   console.dir(message , { 'colors': true, "depth": null })
+// };
 
-const failValidation = (message) => {
- // console.log('------------------------- MD VALIDATOR FAILED --------------------------')
-  console.dir('------------------------- MD VALIDATOR FAILED --------------------------', { "colors": true, "depth": null });
-  console.dir(message , { "colors": true, "depth": null })
-};
+// const printMesage = (message) => { 
+//   console.dir(message , { 'colors': true, "depth": null })
+// }
+
 const converter = new showdown.Converter({
     ghCompatibleHeaderId: true,
     emoji: true,
@@ -55,25 +58,22 @@ const markdownlinter = async (dir) => {
                 }
               };
            // const result = markdownlint.sync(options);
-
            markdownlint(options, function callback(err, result) {
             if (!err) {
-              //console.dir(result, { "colors": true, "depth": null }); 
               if (result.toString().length > 0){ 
-                failValidation(`PLEASE CHECK FOLLOWING LINTER ISSUES WITHIN THE FILE : ${fileName}`);
-                console.dir(result, { "colors": true, "depth": null });
+                errorMessage('MD VALIDATOR' , `PLEASE CHECK FOLLOWING LINTER ISSUES WITHIN THE FILE : ${fileName}`);
+                printMessage(result);
               }else{
-                //console.log(`${fileName} - PASSED`); 
-                console.dir(`${fileName} - PASSED`, { "colors": true, "depth": null });
+                printMessage(`${fileName} - PASSED`);
               } 
             }
           });
          
           } catch (e) {
-            failValidation(e.message);
+            errorMessage('MD VALIDATOR' ,e.message);
           }
         }else{
-          failValidation('Invalid subdir or file extension.');
+          errorMessage('MD VALIDATOR' ,'Invalid subdir or file extension.');
         }
       });   
     });  
@@ -115,8 +115,8 @@ try {
   markdownlinter(folder); 
   //markdownValidator(folder);
  }else{  
-  failValidation('No Path for docs dir. defined');
+  errorMessage('MD VALIDATOR' ,'No Path for docs dir. defined');
  }
 } catch (e) {
-  failValidation(e.message);
+  errorMessage('MD VALIDATOR' ,e.message);
 }

@@ -16,6 +16,17 @@ const processArgs = (args = []) => {
     return argsAndValues;
   };
 
+  const errorMessage = (type , message) => {
+    console.dir(`-------------------------${type} FAILED --------------------------`, { 'colors': true, "depth": null });
+    console.dir(message , { 'colors': true, "depth": null })
+  };
+  
+  const printMessage = (message) => { 
+    console.dir(message , { 'colors': true, "depth": null })
+  }
+
   module.exports = {
     processArgs,
+    errorMessage,
+    printMessage,
   };

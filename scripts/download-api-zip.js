@@ -7,10 +7,11 @@ const AdmZip = require("adm-zip");
 const args = process.argv.slice(2); 
 const folder = args?.[0]+"/reference";
 let zip = new AdmZip(); 
-const failValidation = (message) => {
-  console.log('------------------------- ZIP GENERATOR FAILED --------------------------')
-  console.log(message)
-};
+const {errorMessage  , printMessage} = require('./utils/tools')
+// const failValidation = (message) => {
+//   console.log('------------------------- ZIP GENERATOR FAILED --------------------------')
+//   console.log(message)
+// };
 let downloadFile; 
 const generateZipCollection = async (dir) => { 
   fs.readdir(dir, { withFileTypes: true }, (err, files) => {
@@ -23,7 +24,7 @@ const generateZipCollection = async (dir) => {
           const content = fs.readFileSync(fileName, 'utf8');
           const apiJson = yaml.load(content);
           if (!apiJson.paths || !Object.keys(apiJson.paths).length) {
-            failValidation('No path provided!');
+            errorMessage('ZIP GENERATOR' ,'No path provided!');
           }
           const parsedData = await SwaggerParser.validate(apiJson);
           if (parsedData){ 
@@ -35,10 +36,10 @@ const generateZipCollection = async (dir) => {
                     check = true;
                   } else{ 
                     if (!api.hasOwnProperty('x-proxy-name')){ 
-                      failValidation(`${fileName} - Missing 'x-proxy-name'`);
+                      errorMessage('ZIP GENERATOR'`${fileName} - Missing 'x-proxy-name'`);
                     } 
                     if (!api.hasOwnProperty('x-group-name')){ 
-                      failValidation(`${fileName} - Missing 'x-group-name'`);
+                      errorMessage('ZIP GENERATOR'`${fileName} - Missing 'x-group-name'`);
                     } 
                     check = false;
                     return;
@@ -47,7 +48,7 @@ const generateZipCollection = async (dir) => {
             } 
               if (check){ 
                 const folder = dir.replace('../reference/','');
-                console.log(`Sub Dir accessed ---${ dir.replace('../reference/','')}`); 
+                printMessage(`Sub Dir accessed ---${ dir.replace('../reference/','')}`); 
                if (folder === '../reference'){
                   zip.addFile(file.name, Buffer.from(content, "utf8"), 'Adding folders');
                }
@@ -56,14 +57,14 @@ const generateZipCollection = async (dir) => {
                }  
                 downloadFile = 'tennat_spec';   
                 await zip.writeZip(`${args}/assets/${downloadFile}.zip`); 
-                console.log(`File downloaded ---${file.name}`); 
+                printMessage(`File downloaded ---${file.name}`); 
               } 
           } 
         } catch (e) {
-          failValidation(e.message);
+          errorMessage('ZIP GENERATOR', e.message);
         }
       }else{
-        failValidation('Invalid subdir or file extension.');
+        errorMessage('ZIP GENERATOR', 'Invalid subdir or file extension.');
       }
     });  
  
@@ -72,12 +73,12 @@ const generateZipCollection = async (dir) => {
 
 
 try {
-  console.log(`External Dir ---->>> ${args}`);   
+  printMessage(`External Dir ---->>> ${args}`);   
   if ( args?.length > 0){ 
   generateZipCollection(folder);
   }else{
-    failValidation('No Path for reference dir. defined');
+    errorMessage('ZIP GENERATOR','No Path for reference dir. defined');
  }
 } catch (e) {
-  failValidation(e.message);
+  errorMessage('ZIP GENERATOR',e.message);
 }

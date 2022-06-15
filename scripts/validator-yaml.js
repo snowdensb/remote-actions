@@ -5,10 +5,13 @@ const yaml = require('js-yaml');
 const SwaggerParser = require('@apidevtools/swagger-parser'); 
 const args = process.argv.slice(2); 
 const folder = args?.[0]+"/reference"; 
-const failValidation = (message) => {
-  console.log('------------------------- VALIDATOR FAILED --------------------------') 
-  console.log(message)
-};
+
+const {errorMessage  , printMessage} = require('./utils/tools')
+
+// const failValidation = (message) => {
+//   printMessage('------------------------- YAML VALIDATOR FAILED --------------------------') 
+//   printMessage(message)
+// };
 
 /* VALIDATION RULES
    -  `YAML` Extension check 
@@ -32,7 +35,7 @@ const validateDir = async (dir) => {
           const content = fs.readFileSync(fileName, 'utf8');
           const apiJson = yaml.load(content);
           if (!apiJson.paths || !Object.keys(apiJson.paths).length) {
-            failValidation('No path provided!');
+            errorMessage('YAML VALIDATOR'  ,'No path provided!');
           }
           const parsedData = await SwaggerParser.validate(apiJson);
           if (parsedData){
@@ -43,10 +46,10 @@ const validateDir = async (dir) => {
                       check = true;
                     } else{ 
                       if (!api.hasOwnProperty('x-proxy-name')){ 
-                        failValidation(`${fileName} - Missing 'x-proxy-name'`);
+                        errorMessage('YAML VALIDATOR'  ,`${fileName} - Missing 'x-proxy-name'`);
                       } 
                       if (!api.hasOwnProperty('x-group-name')){ 
-                        failValidation(`${fileName} - Missing 'x-group-name'`);
+                        errorMessage('YAML VALIDATOR'  ,`${fileName} - Missing 'x-group-name'`);
                       } 
                       check = false;
                       return;
@@ -54,26 +57,26 @@ const validateDir = async (dir) => {
                 }
               } 
                 if (check){
-                console.log(`${fileName} - PASSED`);
+                printMessage(`${fileName} - PASSED`);
                 }
             }
         } catch (e) {
-          failValidation(e.message);
+          errorMessage('YAML VALIDATOR'  ,e.message);
         }
       }else{
-        failValidation('Invalid subdir or file extension.');
+        errorMessage('YAML VALIDATOR'  ,'Invalid subdir or file extension.');
       }
     });
   });
 };
 
 try {
-  console.log(`External Dir ---->>> ${args}`);   
+  printMessage(`External Dir ---->>> ${args}`);   
   if ( args?.length > 0){ 
   validateDir(folder);
  }else{
-  failValidation('No Path for reference dir. defined');
+  errorMessage('YAML VALIDATOR'  ,'No Path for reference dir. defined');
  }
 } catch (e) {
-  failValidation(e.message);
+  errorMessage('YAML VALIDATOR'  ,e.message);
 }
