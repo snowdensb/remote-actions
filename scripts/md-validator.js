@@ -6,11 +6,12 @@ const markdownlint = require("markdownlint");
 const args = process.argv.slice(2); 
 const folder = args?.[0]+"/docs";
 const { enrichHTMLFromMarkup, showdownHighlight, mdExtension } = require('./utils/md-utils'); 
-const html_validator = require('html-validator')
+//const html_validator = require('html-validator')
 
 const failValidation = (message) => {
-  console.log('------------------------- MD VALIDATOR FAILED --------------------------')
-  console.log(message)
+ // console.log('------------------------- MD VALIDATOR FAILED --------------------------')
+  console.dir('------------------------- MD VALIDATOR FAILED --------------------------', { "colors": true, "depth": null });
+  console.dir(message , { "colors": true, "depth": null })
 };
 const converter = new showdown.Converter({
     ghCompatibleHeaderId: true,
@@ -53,13 +54,21 @@ const markdownlinter = async (dir) => {
                     "line_length": false,
                 }
               };
-            const result = markdownlint.sync(options);
-            if (result.toString().length > 0){ 
-              failValidation(`PLEASE CHECK FOLLOWING LINTER ISSUES WITHIN THE FILE : ${fileName}`);
-              console.log(result.toString());
-            }else{
-              console.log(`${fileName} - PASSED`);
+           // const result = markdownlint.sync(options);
+
+           markdownlint(options, function callback(err, result) {
+            if (!err) {
+              //console.dir(result, { "colors": true, "depth": null }); 
+              if (result.toString().length > 0){ 
+                failValidation(`PLEASE CHECK FOLLOWING LINTER ISSUES WITHIN THE FILE : ${fileName}`);
+                console.dir(result, { "colors": true, "depth": null });
+              }else{
+                //console.log(`${fileName} - PASSED`); 
+                console.dir(`${fileName} - PASSED`, { "colors": true, "depth": null });
+              } 
             }
+          });
+         
           } catch (e) {
             failValidation(e.message);
           }
@@ -70,35 +79,35 @@ const markdownlinter = async (dir) => {
     });  
 };
 
-const markdownValidator= async (dir) => {  
-  fs.readdir(dir, { withFileTypes: true }, (err, files) => {
-    files.forEach(async file => { 
-      if (file.isDirectory()) {
-        markdownValidator(`${dir}/${file.name}`);
-      } else if (/\.md$/.test(file.name)){ 
-        try {
-          let fileName = `${dir}/${file.name}`; 
-          const content = fs.readFileSync(fileName, 'utf8'); 
-          const htmlData = converter.makeHtml(content);   
-          console.log(htmlData);
-          const options = {
-            validator: 'WHATWG',
-            data: htmlData,
-            isFragment: true
-          }
-          const result = await html_validator(options)
-          console.log(`************************************************************************************************************************************
-          **********************************************************************************************************************************************`); 
-          console.log(result);
-        } catch (e) {
-          failValidation(e.message);
-        }
-      }else{
-        failValidation('Invalid subdir or Not a markdown file.');
-      }
-    });   
-  });  
-};
+// const markdownValidator= async (dir) => {  
+//   fs.readdir(dir, { withFileTypes: true }, (err, files) => {
+//     files.forEach(async file => { 
+//       if (file.isDirectory()) {
+//         markdownValidator(`${dir}/${file.name}`);
+//       } else if (/\.md$/.test(file.name)){ 
+//         try {
+//           let fileName = `${dir}/${file.name}`; 
+//           const content = fs.readFileSync(fileName, 'utf8'); 
+//           const htmlData = converter.makeHtml(content);   
+//           //console.log(htmlData);
+//           const options = {
+//             validator: 'WHATWG',
+//             data: htmlData,
+//             isFragment: true
+//           }
+//           const result = await html_validator(options)
+//           console.log(`************************************************************************************************************************************
+//           **********************************************************************************************************************************************`); 
+//           console.log(result);
+//         } catch (e) {
+//           failValidation(e.message);
+//         }
+//       }else{
+//         failValidation('Invalid subdir or Not a markdown file.');
+//       }
+//     });   
+//   });  
+// };
 
 try {
   console.log(`External Dir ---->>> ${args}`);   
