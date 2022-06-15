@@ -36,31 +36,27 @@ const validateDir = async (dir) => {
           }
           const parsedData = await SwaggerParser.validate(apiJson);
           if (parsedData){
-      for (const [path, obj] of Object.entries(apiJson.paths)) {
-        for (const [reqType, api] of Object.entries(obj)) {
-          if (typeof api !== 'object' || api === null) { continue; }
-             if( (api['x-group-name']) && api['x-proxy-name']){
-              check = true;
-             } else{ 
-               if (!api.hasOwnProperty('x-proxy-name')){ 
-                failValidation(`${fileName} - Missing 'x-proxy-name'`);
-               }
-
-               if (!api.hasOwnProperty('x-group-name')){ 
-                failValidation(`${fileName} - Missing 'x-group-name'`);
-               }
-             
-              check = false;
-              return;
-             }
-        }
-      }
-
-      if (check){
-        console.log(`${fileName} - PASSED`);
-      }
-    
-          }
+              for (const [path, obj] of Object.entries(apiJson.paths)) {
+                for (const [reqType, api] of Object.entries(obj)) {
+                  if (typeof api !== 'object' || api === null) { continue; }
+                    if( (api['x-group-name']) && api['x-proxy-name']){
+                      check = true;
+                    } else{ 
+                      if (!api.hasOwnProperty('x-proxy-name')){ 
+                        failValidation(`${fileName} - Missing 'x-proxy-name'`);
+                      } 
+                      if (!api.hasOwnProperty('x-group-name')){ 
+                        failValidation(`${fileName} - Missing 'x-group-name'`);
+                      } 
+                      check = false;
+                      return;
+                    }
+                }
+              } 
+                if (check){
+                console.log(`${fileName} - PASSED`);
+                }
+            }
         } catch (e) {
           failValidation(e.message);
         }

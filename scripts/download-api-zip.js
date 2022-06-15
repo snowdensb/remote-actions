@@ -27,18 +27,37 @@ const generateZipCollection = async (dir) => {
           }
           const parsedData = await SwaggerParser.validate(apiJson);
           if (parsedData){ 
-              const folder = dir.replace('../reference/','');
-             console.log(`Sub Dir accessed ---${ dir.replace('../reference/','')}`); 
-      
-            if (folder === '../reference'){
-               zip.addFile(file.name, Buffer.from(content, "utf8"), "entry comment goes here"); 
+
+            for (const [path, obj] of Object.entries(apiJson.paths)) {
+              for (const [reqType, api] of Object.entries(obj)) {
+                if (typeof api !== 'object' || api === null) { continue; }
+                  if( (api['x-group-name']) && api['x-proxy-name']){
+                    check = true;
+                  } else{ 
+                    if (!api.hasOwnProperty('x-proxy-name')){ 
+                      failValidation(`${fileName} - Missing 'x-proxy-name'`);
+                    } 
+                    if (!api.hasOwnProperty('x-group-name')){ 
+                      failValidation(`${fileName} - Missing 'x-group-name'`);
+                    } 
+                    check = false;
+                    return;
+                  }
+              }
             } 
-            else {
-               zip.addFile(`${folder}/${file.name}`, Buffer.from(content, "utf8"), "entry comment goes here");  
-            }  
-             downloadFile = 'tennat_spec';   
-             await zip.writeZip(`${args}/assets/${downloadFile}.zip`); 
-             console.log(`File downloaded ---${file.name}`); 
+              if (check){ 
+                const folder = dir.replace('../reference/','');
+                console.log(`Sub Dir accessed ---${ dir.replace('../reference/','')}`); 
+               if (folder === '../reference'){
+                  zip.addFile(file.name, Buffer.from(content, "utf8"), 'Adding folders');
+               }
+               else {
+                  zip.addFile(`${folder}/${file.name}`, Buffer.from(content, "utf8"), 'Adding file');  
+               }  
+                downloadFile = 'tennat_spec';   
+                await zip.writeZip(`${args}/assets/${downloadFile}.zip`); 
+                console.log(`File downloaded ---${file.name}`); 
+              } 
           } 
         } catch (e) {
           failValidation(e.message);
