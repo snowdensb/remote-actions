@@ -24,9 +24,9 @@ const {errorMessage  , printMessage} = require('./utils/tools')
 const validateDir = async (dir) => {
   let check = false;
   fs.readdir(dir, { withFileTypes: true }, (err, files) => {
-    files.forEach(async file => {
+    files?.forEach(async file => {
 
-      if (file.isDirectory()) {
+      if (file?.isDirectory()) {
         validateDir(`${dir}/${file.name}`);
       } else if (/\.yaml$/.test(file.name)){
 
@@ -71,7 +71,7 @@ const validateDir = async (dir) => {
 };
 
 try {
-  printMessage(`External Dir ---->>> ${args}`);   
+  printMessage(`External Dir ---->>> ${folder}`);   
   if ( args?.length > 0){ 
   validateDir(folder);
  }else{

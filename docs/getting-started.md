@@ -1,6 +1,6 @@
 # Getting Started
 
-## Welcome to the Developer Studio!
+## Welcome to the Developer Studio
 
 To onboard into the `Fiserv Developer Studio` as a new Tenant each product must support following APIs standard. So that `Fiserv` will able to retrieve product API specifications and documentation.
 
