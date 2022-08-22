@@ -69,7 +69,7 @@ const markdownlinter = async (dir) => {
             errorMessage('MD VALIDATOR' ,e.message);
           }
         }else{
-          errorMessage('MD VALIDATOR' ,`Invalid subdir or file extension : ${file.name}`);
+          errorMessage('MD VALIDATOR' ,`Invalid subdir or file extension : ${dir}/${file.name}`);
         }
       });   
     });  
