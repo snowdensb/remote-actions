@@ -38,9 +38,9 @@ const generateZipCollection = async (dir) => {
                     if (!api.hasOwnProperty('x-proxy-name')){ 
                       errorMessage('ZIP GENERATOR'`${fileName} - Missing 'x-proxy-name'`);
                     } 
-                    if (!api.hasOwnProperty('x-group-name')){ 
-                      errorMessage('ZIP GENERATOR'`${fileName} - Missing 'x-group-name'`);
-                    } 
+                    // if (!api.hasOwnProperty('x-group-name')){ 
+                    //   errorMessage('ZIP GENERATOR'`${fileName} - Missing 'x-group-name'`);
+                    // } 
                     check = false;
                     return;
                   }
