@@ -55,7 +55,13 @@ const generateZipCollection = async (dir) => {
                else {
                   zip.addFile(`${folder}/${file.name}`, Buffer.from(content, "utf8"), 'Adding file');  
                }  
-                downloadFile = 'tennat_spec';   
+
+               if (args[0]?.includes("/")){
+                downloadFile = args[0].split('/').pop(); 
+                downloadFile= downloadFile+"_spec"
+               }else{
+                downloadFile = 'tennat_spec';  
+               }
                 await zip.writeZip(`${args}/assets/${downloadFile}.zip`); 
                 printMessage(`File downloaded ---${file.name}`); 
               } 
