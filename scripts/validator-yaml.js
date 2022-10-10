@@ -64,7 +64,7 @@ const validateDir = async (dir) => {
           errorMessage('YAML VALIDATOR'  ,e.message);
         }
       }else{
-        errorMessage('YAML VALIDATOR'  ,'Invalid subdir or file extension.');
+        errorMessage('YAML VALIDATOR'  ,`Not a YAML Spec file : ${file.name}`);
       }
     });
   });
