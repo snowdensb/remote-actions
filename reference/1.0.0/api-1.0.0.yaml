@@ -20,6 +20,7 @@ paths:
       tags:
         - Authenticate
       x-group-name: 'Authenticate' 
+      x-proxy-name: 'Authenticate V1'      
       operationId: authenticateV1
       summary: Generate an sectoken token for user authentication.
       description: Func 0000 / Version 11 is used for topsecret authentication and return sectoken which can be used for next consecutive API calls.
