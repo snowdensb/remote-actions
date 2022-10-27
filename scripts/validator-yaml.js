@@ -5,13 +5,7 @@ const yaml = require('js-yaml');
 const SwaggerParser = require('@apidevtools/swagger-parser'); 
 const args = process.argv.slice(2); 
 const folder = args?.[0]+"/reference"; 
-
 const {errorMessage  , printMessage} = require('./utils/tools')
-
-// const failValidation = (message) => {
-//   printMessage('------------------------- YAML VALIDATOR FAILED --------------------------') 
-//   printMessage(message)
-// };
 
 /* VALIDATION RULES
    -  `YAML` Extension check 

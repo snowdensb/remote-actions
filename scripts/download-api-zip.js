@@ -8,10 +8,7 @@ const args = process.argv.slice(2);
 const folder = args?.[0]+"/reference";
 let zip = new AdmZip(); 
 const {errorMessage  , printMessage} = require('./utils/tools')
-// const failValidation = (message) => {
-//   console.log('------------------------- ZIP GENERATOR FAILED --------------------------')
-//   console.log(message)
-// };
+
 let downloadFile; 
 const generateZipCollection = async (dir) => { 
   fs.readdir(dir, { withFileTypes: true }, (err, files) => {
