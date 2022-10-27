@@ -43,7 +43,7 @@ const validateDir = async (dir) => {
                       check = true;
                     } else{ 
                       if (!api.hasOwnProperty('x-proxy-name')){ 
-                        errorMessage('YAML VALIDATOR'  ,`File :reference/${fileName} API-Path:${path} Error: Missing 'x-proxy-name'`);
+                        errorMessage('YAML VALIDATOR'  ,`File :${fileName} API-Path:${path} Error: Missing 'x-proxy-name'`);
                       } 
                       // if (!api.hasOwnProperty('x-group-name')){ 
                       //   errorMessage('YAML VALIDATOR'  ,`${fileName} - Missing 'x-group-name'`);
@@ -54,7 +54,7 @@ const validateDir = async (dir) => {
                 }
               } 
                 if (check){
-                printMessage(`${fileName} - PASSED`);
+                printMessage(`File: ${fileName} : PASSED`);
                 }
             }
         } catch (e) {
