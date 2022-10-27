@@ -5,6 +5,7 @@ const yaml = require('js-yaml');
 const SwaggerParser = require('@apidevtools/swagger-parser'); 
 const args = process.argv.slice(2); 
 const folder = args?.[0]+"/reference"; 
+
 const {errorMessage  , printMessage} = require('./utils/tools')
 
 /* VALIDATION RULES
@@ -28,6 +29,7 @@ const validateDir = async (dir) => {
           const fileName = `${dir}/${file.name}`;
           const content = fs.readFileSync(fileName, 'utf8');
           const apiJson = yaml.load(content);
+          const tenantName =  args[0].split('/').pop(); 
           if (!apiJson.paths || !Object.keys(apiJson.paths).length) {
             errorMessage('YAML VALIDATOR'  ,'No path provided!');
           }
@@ -40,7 +42,7 @@ const validateDir = async (dir) => {
                       check = true;
                     } else{ 
                       if (!api.hasOwnProperty('x-proxy-name')){ 
-                        errorMessage('YAML VALIDATOR'  ,`${fileName} - Missing 'x-proxy-name'`);
+                        errorMessage('YAML VALIDATOR'  ,`File :${fileName.split(tenantName)[1]} Path:${path} Error: Missing 'x-proxy-name'`);
                       } 
                       // if (!api.hasOwnProperty('x-group-name')){ 
                       //   errorMessage('YAML VALIDATOR'  ,`${fileName} - Missing 'x-group-name'`);
