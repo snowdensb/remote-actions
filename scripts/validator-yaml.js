@@ -26,10 +26,11 @@ const validateDir = async (dir) => {
       } else if (/\.yaml$/.test(file.name)){
 
         try {
-          const fileName = `${dir}/${file.name}`;
+          let fileName = `${dir}/${file.name}`;
           const content = fs.readFileSync(fileName, 'utf8');
           const apiJson = yaml.load(content);
           const tenantName =  args[0].split('/').pop(); 
+          fileName = fileName.split(`/${tenantName}/`)[1];
           if (!apiJson.paths || !Object.keys(apiJson.paths).length) {
             errorMessage('YAML VALIDATOR'  ,'No path provided!');
           }
@@ -42,7 +43,7 @@ const validateDir = async (dir) => {
                       check = true;
                     } else{ 
                       if (!api.hasOwnProperty('x-proxy-name')){ 
-                        errorMessage('YAML VALIDATOR'  ,`File :reference/${fileName.split(reference)[1]} API-Path:${path} Error: Missing 'x-proxy-name'`);
+                        errorMessage('YAML VALIDATOR'  ,`File :reference/${fileName} API-Path:${path} Error: Missing 'x-proxy-name'`);
                       } 
                       // if (!api.hasOwnProperty('x-group-name')){ 
                       //   errorMessage('YAML VALIDATOR'  ,`${fileName} - Missing 'x-group-name'`);
