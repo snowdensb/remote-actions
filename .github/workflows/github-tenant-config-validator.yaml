@@ -1,4 +1,4 @@
-name: Markdown Validator Action
+name: TenantConfig Validator
 on:
   workflow_call:
   # Triggers the workflow on push or pull request events but only for the dev , stage and main branch

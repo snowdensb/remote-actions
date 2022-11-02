@@ -1,4 +1,4 @@
-name: API Specs ZIP Generator Action
+name: API Specs ZIP Generator
 on:
   # Triggers the workflow on push or pull request events but only for the develop , stage and main branch
   workflow_call:  
