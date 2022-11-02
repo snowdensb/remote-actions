@@ -45,7 +45,7 @@ jobs:
         run: |
          pwd
          ls -la
-      - name: Running MarkDown Validator.....
+      - name: Running {name}.....
         run: |
           pwd
           cd ${{ github.workspace }}/tools/scripts
