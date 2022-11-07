@@ -1,0 +1,18 @@
+name: Tenant Validator
+on:
+  # Triggers the workflow on push or pull request events but only for the dev, stage and main branch
+  push:
+    branches: [ develop,stage,main ]
+  pull_request:
+    branches: [ develop,stage,main ]
+   
+jobs:
+  api-validator: 
+    uses: Fiserv/remote-actions/.github/workflows/github-yaml-validator.yaml@develop
+  docs-validator: 
+    uses: Fiserv/remote-actions/.github/workflows/github-md-validator.yaml@develop
+  tenant-config-validator: 
+    uses: Fiserv/remote-actions/.github/workflows/github-tenant-config-validator.yaml@develop
+  api-zip-generator:
+    needs: api-validator
+    uses: Fiserv/remote-actions/.github/workflows/github-zip-generator.yaml@develop
