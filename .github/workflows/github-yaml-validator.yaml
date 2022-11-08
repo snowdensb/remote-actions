@@ -47,10 +47,10 @@ jobs:
          ls -la
       - name: Running API Specs Validator.....
         run: |
+          using: 'node16'
           pwd
           cd ${{ github.workspace }}/tools/scripts
           ls -la
-          using: 'node16'
           npmv=$(npm --version)
           echo "NPM version installed : " $npmv
           nodev=$(node --version)
