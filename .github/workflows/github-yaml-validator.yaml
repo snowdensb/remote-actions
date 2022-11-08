@@ -47,7 +47,6 @@ jobs:
          ls -la
       - name: Running API Specs Validator.....
         run: |
-          using: 'node16'
           pwd
           cd ${{ github.workspace }}/tools/scripts
           ls -la
