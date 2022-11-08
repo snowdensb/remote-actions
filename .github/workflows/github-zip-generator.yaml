@@ -1,10 +1,11 @@
 name: API Specs ZIP Generator
 on:
   # Triggers the workflow on push or pull request events but only for the develop , stage and main branch
-  push:
-    branches: [ develop,stage,main ]
-    paths:
-      - 'reference/**' 
+  workflow_call:  
+  # push:
+  #   branches: [ develop,stage,main ]
+  #   paths:
+  #     - 'reference/**' 
 
 jobs:
   ZIP-Generator-Actions:
@@ -46,6 +47,7 @@ jobs:
          ls -la
       - name: Running API Specs ZIP Generator.....
         run: |
+          using: 'node16'
           pwd
           cd ${{ github.workspace }}/tools/scripts
           ls -la
