@@ -50,6 +50,7 @@ jobs:
           pwd
           cd ${{ github.workspace }}/tools/scripts
           ls -la
+          using: 'node16'
           npmv=$(npm --version)
           echo "NPM version installed : " $npmv
           nodev=$(node --version)
