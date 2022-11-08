@@ -9,15 +9,15 @@ on:
    
 jobs:
   api-validator: 
-    uses: Fiserv/remote-actions/.github/workflows/github-yaml-validator.yaml@${{github.ref}}
+    uses: Fiserv/remote-actions/.github/workflows/github-yaml-validator.yaml@${{ github.head_ref }}
     if: ${{ (github.ref == 'refs/heads/develop') || (github.ref == 'refs/heads/stage') || (github.ref == 'refs/heads/main') }}
   docs-validator: 
-    uses: Fiserv/remote-actions/.github/workflows/github-md-validator.yaml@${{github.ref}}
+    uses: Fiserv/remote-actions/.github/workflows/github-md-validator.yaml@${{ github.head_ref }}
     if: ${{ (github.ref == 'refs/heads/develop') || (github.ref == 'refs/heads/stage') || (github.ref == 'refs/heads/main') }}    
   tenant-config-validator: 
-    uses: Fiserv/remote-actions/.github/workflows/github-tenant-config-validator.yaml@${{github.ref}}
+    uses: Fiserv/remote-actions/.github/workflows/github-tenant-config-validator.yaml@${{ github.head_ref }}
     if: ${{ (github.ref == 'refs/heads/develop') || (github.ref == 'refs/heads/stage') || (github.ref == 'refs/heads/main') }}     
   api-zip-generator:
     needs: api-validator
-    uses: Fiserv/remote-actions/.github/workflows/github-zip-generator.yaml@${{github.ref}}
+    uses: Fiserv/remote-actions/.github/workflows/github-zip-generator.yaml@${{ github.head_ref }}
     if: ${{ (github.ref == 'refs/heads/develop') || (github.ref == 'refs/heads/stage') || (github.ref == 'refs/heads/main') }}     
