@@ -11,7 +11,6 @@ jobs:
   api-validator: 
     uses: Fiserv/remote-actions/.github/workflows/github-yaml-validator.yaml@develop
     if: ${{ (github.ref == 'refs/heads/develop') || (github.ref == 'refs/heads/stage') || (github.ref == 'refs/heads/main') }}
-    steps:
       - run: echo "🔎 The name of your branch is ${{ github.ref }}    
   # docs-validator: 
   #   uses: Fiserv/remote-actions/.github/workflows/github-md-validator.yaml@develop
