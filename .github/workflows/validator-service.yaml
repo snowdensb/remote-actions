@@ -10,7 +10,11 @@ on:
 jobs:
   api-validator: 
     uses: ./.github/workflows/github-yaml-validator.yaml
-    if: ${{ (github.ref == 'refs/heads/develop') || (github.ref == 'refs/heads/stage') || (github.ref == 'refs/heads/main') && {github.event.path == 'reference/**'} }}
+    if: ${{ (github.ref == 'refs/heads/develop') || (github.ref == 'refs/heads/stage') || (github.ref == 'refs/heads/main') }}
+    with:
+      filters: |
+        path1:
+          - 'reference/**'
   # docs-validator: 
   #   uses: Fiserv/remote-actions/.github/workflows/github-md-validator.yaml@develop
   #   if: ${{ (github.ref == 'refs/heads/develop') || (github.ref == 'refs/heads/stage') || (github.ref == 'refs/heads/main') }}    
