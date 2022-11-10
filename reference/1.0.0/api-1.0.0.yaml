@@ -4,7 +4,7 @@ info:
   title: US Backend API - Specifications-Test1
   description: The documentation here is designed to provide all of the technical guidance required to consume and integrate with our platform agnostic REST APIs as well as our platform specific REST APIs.  Platform agnostic APIs allow for similar request/response formats across all backends.  Platform Specific APIs are prefaced with names of the platforms (e.g. North, Optis).   New in 1.0.13 - Added new attributes to transaction-research API (tokenTypeCode, tokenValue).  New in version 1.0.14 - Removed 'D' as a valid value for RowAction for Optis.  Included APIs for mm-equipment-summary and mm-equipment-detail.  New in version 1.0.15 - Added South cash-advance-summary and cash-advance-detail APIs.  Added v2 view-notes and write-notes.
   contact:
-    name: John Fries, Steve Furlani, Kranthi Ale Test123
+    name: John Fries, Steve Furlani, Kranthi Ale Test1234
     email: John.Fries@Fiserv.com
 servers:
   - {url: 'https://ebus-dev.1dc.com', description: Development}
