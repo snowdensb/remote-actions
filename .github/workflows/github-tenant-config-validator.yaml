@@ -6,6 +6,8 @@ on:
     branches: [ develop,stage,main ]
   pull_request:
     branches: [ develop,stage,main ]
+    paths:
+      - 'config/tenant.json' 
 
 jobs:
   Tenant-Config-Action:

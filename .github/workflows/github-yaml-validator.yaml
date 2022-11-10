@@ -6,7 +6,9 @@ on:
     branches: [ develop,stage,main ]
   pull_request:
     branches: [ develop,stage,main ]
-
+    paths:
+      - 'reference/**' 
+      
 jobs:
   API-Validator-Actions:
     runs-on: ubuntu-latest
