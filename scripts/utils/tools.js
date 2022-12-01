@@ -16,10 +16,18 @@ const processArgs = (args = []) => {
   return argsAndValues;
 };
 
+const errorMsg = (message) => {
+  console.log('\x1b[31m');
+  console.dir(message , { 'colors': false, "depth": null });
+  console.log('\x1b[0m');
+};
+
 const errorMessage = (type , message) => {
   console.dir(`-------------------------${type} FAILED --------------------------`, { 'colors': true, "depth": null });
-  console.dir(message , { 'colors': true, "depth": null })
+  console.dir(message , { 'colors': true, "depth": null });
 };
+
+ 
 
 const printMessage = (message) => { 
   console.dir(message , { 'colors': true, "depth": null })
@@ -27,6 +35,7 @@ const printMessage = (message) => {
 
 module.exports = {
   processArgs,
+  errorMsg,
   errorMessage,
   printMessage,
 };
