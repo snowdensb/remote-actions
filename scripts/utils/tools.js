@@ -17,12 +17,13 @@ const processArgs = (args = []) => {
   };
 
   const errorMessage = (type , message) => {
-    console.dir(`-------------------------${type} FAILED --------------------------`, { 'colors': true, "depth": null });
-    console.dir(message , { 'colors': true, "depth": null })
+    console.error(`\x1b[31m -------------------------${type} FAILED -------------------------- \x1b[5m`);
+    console.error(`\x1b[33m ${message} \x1b[1m`);
   };
   
   const printMessage = (message) => { 
-    console.dir(message , { 'colors': true, "depth": null })
+    //console.dir(message , { 'colors': true, "depth": null });
+    console.log(`\x1b[32m ${message} \x1b[0m`);
   }
 
   module.exports = {

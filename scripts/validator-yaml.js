@@ -58,7 +58,8 @@ const validateDir = async (dir) => {
                 }
             }
         } catch (e) {
-          errorMessage('YAML VALIDATOR'  ,e.message);
+          errorMessage('YAML VALIDATOR'  ,`File : ${file.name}`);
+          console.error(`\x1b[31m Error: ${e.message}`);
         }
       }else{
         errorMessage('YAML VALIDATOR'  ,`Not a YAML Spec file : ${file.name}`);
