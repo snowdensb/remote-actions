@@ -16,21 +16,17 @@ const processArgs = (args = []) => {
   return argsAndValues;
 };
 
-const errorMsg = (message) => {
-  console.log('\x1b[31m');
-  console.log(message , { 'colors': false, "depth": null });
-  console.log('\x1b[0m');
+const errorMsg = (message) => { 
+  console.error(`\x1b[31m ${message} \x1b[0m`  ); 
 };
 
 const errorMessage = (type , message) => {
-  console.log(`-------------------------${type} FAILED --------------------------`);
-  console.log(message );
+  console.error(`\x1b[41m -------------------------${type} FAILED -------------------------- \x1b[0m` );
+  console.error(`\x1b[33m ${message} \x1b[0m`  );
 };
-
- 
-
+  
 const printMessage = (message) => { 
-  console.log(message );
+  console.log(`\x1b[32m \x1b[1m ${message} \x1b[0m`  );
 }
 
 module.exports = {
