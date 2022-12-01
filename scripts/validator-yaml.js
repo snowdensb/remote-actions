@@ -58,7 +58,7 @@ const validateDir = async (dir) => {
                 }
             }
         } catch (e) {
-          errorMessage('YAML VALIDATOR'  ,`File : ${file.name}`);
+          errorMessage('YAML VALIDATOR'  ,`File : ${file.name} : FAILED`);
           errorMsg(`Error: ${e.message}`);
         }
       }else{

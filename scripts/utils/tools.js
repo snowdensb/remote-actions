@@ -18,19 +18,19 @@ const processArgs = (args = []) => {
 
 const errorMsg = (message) => {
   console.log('\x1b[31m');
-  console.dir(message , { 'colors': false, "depth": null });
+  console.log(message , { 'colors': false, "depth": null });
   console.log('\x1b[0m');
 };
 
 const errorMessage = (type , message) => {
-  console.dir(`-------------------------${type} FAILED --------------------------`, { 'colors': true, "depth": null });
-  console.dir(message , { 'colors': true, "depth": null });
+  console.log(`-------------------------${type} FAILED --------------------------`);
+  console.log(message );
 };
 
  
 
 const printMessage = (message) => { 
-  console.dir(message , { 'colors': true, "depth": null })
+  console.log(message );
 }
 
 module.exports = {
